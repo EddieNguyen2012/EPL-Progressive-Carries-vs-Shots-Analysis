@@ -1,0 +1,38 @@
+---
+title: "Progressive Ball-Carrying and Dispossession in the English Premier League"
+subtitle: "Subtitle"
+author: "Eddie Nguyen"
+thanks: "Project repository available at: [https://github.com/peteragao/MATH261A-project-template](https://github.com/peteragao/MATH261A-project-template)."
+date: today
+date-format: long
+abstract: "Abstract here."
+format: pdf
+bibliography: references.bib
+---
+
+```{r}
+#| include: false
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(palmerpenguins)
+```
+
+# Introduction
+
+The English Premier League (EPL) is known for its high level of tactical and physical intensity, requiring players to make quick decisions while facing significant pressure from opponents. One type of player who can help teams overcome this pressure is a dribbling specialist, who uses individual ball-carrying ability to advance the ball and move past defenders.
+
+However, progressive ball-carrying can also involve risk. Attempting to advance the ball through opposing players may increase the possibility of losing possession. This raises an interesting question: is greater progressive ball-carrying associated with more frequent dispossession among EPL players?
+
+In this paper, we examine the relationship between progressive carries and dispossessions among players in the 2024–25 English Premier League season. To account for differences in playing time, both variables will be measured per 90 minutes. Using a simple linear regression, we will investigate whether players who make more progressive carries per 90 minutes also tend to be dispossessed more frequently. The results can provide insight into the potential tradeoff between advancing the ball and retaining possession.
+
+# Data
+
+['Link here'](https://data.scorenetwork.org/soccer/epl-player-stats-2425.html)
+
+# Methods
+
+# Results
+
+# References
