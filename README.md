@@ -1,20 +1,37 @@
-# EPL-Progressive-Carries-vs-Shots-Analysis
+# EPL Progressive Carries and Shots Analysis
 
-Analyzing the relationship between Progressive Ball Carrying and Total Shots per 90 minutes in the English Premier League Season 24-25 to analyze whether individual ball carrying is effective in the EPL using R
+Author: Eddie Nguyen
 
-## Data
+Submission date: October 12, 2026
 
-Data used in this project was obtained from the [SCORE Sports Data Repository](https://data.scorenetwork.org/soccer/epl-player-stats-2425.html). The dataset contains player-level statistics from the 2024–25 English Premier League season and was originally compiled from publicly available sources. The data were used to examine the relationship between progressive carries and shots among EPL players.
+This project examines the relationship between progressive carries per 90 minutes and shots per 90 minutes among qualified outfield players in the 2024–25 English Premier League season. The primary analysis uses simple linear regression and an exploratory comparison by player position.
 
-## External Resources
+## Repository structure
 
-The final report and code were written by Eddie Nguyen. The following external resources were used for data collection, preliminary research, and technical assistance:
+```text
+.
+├── analysis/
+│   └── 00_clean-data.R       # Data import, filtering, transformations, and models
+├── data/
+│   └── epl_player_stats_24_25.csv
+├── paper/
+│   ├── paper.qmd             # Quarto source for the report
+│   └── references.bib
+├── LICENSE                   # License for this repository's code and writing
+├── MATH261A-project-1.Rproj
+└── README.md
+```
 
-- [SCORE Sports Data Repository](https://data.scorenetwork.org/) for the EPL player statistics dataset.
-- [R Documentation](https://www.rdocumentation.org/) and package documentation for statistical analysis and data visualization.
-- LLM-based chatbot ([ChatGPT](https://chatgpt.com/)) for language polishing, rephrasing, and assistance with R Markdown/Quarto syntax.
-- Online programming and statistics resources, including [Stack Overflow](https://stackoverflow.com/), for troubleshooting and technical reference.
+Run the analysis from the project root with `source("analysis/00_clean-data.R")`. Render the paper from the `paper/` directory with Quarto.
 
-# Acknowledgments
+## Data and data license
+
+The data were obtained from the [SCORE Sports Data Repository](https://data.scorenetwork.org/soccer/epl-player-stats-2425.html), which identifies the source as a Kaggle dataset. The Kaggle dataset is released under the MIT License (see the linked [Kaggle source](https://www.kaggle.com/datasets/aesika/english-premier-league-player-stats-2425/data)), and the SCORE page does not state a separate license. The CC0 file in this repository applies to the repository materials created for this project, not to the underlying dataset, which remains under its MIT License.
+
+## External resources and LLM use
+
+The SCORE Sports Data Repository was used for the player-statistics dataset. R and package documentation, including the documentation for `dplyr`, `ggplot2`, `knitr`, and Quarto, was used for implementation. ChatGPT was used for language editing, rephrasing, and assistance with R/Quarto syntax. Claude (Anthropic) was used to review the draft against the rubric and to suggest captions, an abstract, a paragraph on alternative data sources, and the analysis script. All data-processing decisions, statistical analyses, interpretations, and conclusions were reviewed and verified by the author. Online programming resources, including Stack Overflow, were used for troubleshooting when needed.
+
+## Acknowledgments
 
 This project repository is based on the template provided by [Rohan Alexander](https://github.com/RohanAlexander/starter_folder/tree/main).

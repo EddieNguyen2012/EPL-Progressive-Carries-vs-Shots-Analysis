@@ -4,7 +4,7 @@ author: "Eddie Nguyen"
 thanks: "Project repository available at: [https://github.com/EddieNguyen2012/EPL-Progressive-Carries-vs-Shots-Analysis](https://github.com/EddieNguyen2012/EPL-Progressive-Carries-vs-Shots-Analysis.git)."
 date: today
 date-format: long
-abstract: This study examines the relationship between progressive ball-carrying and shooting activity among 279 outfield players in the 2024–25 English Premier League season. Progressive carries per 90 minutes were used as the explanatory variable and shots per 90 minutes as the response variable. A simple linear regression was used to evaluate the direction and strength of their linear association. The results indicate a statistically significant positive association between progressive carries and shots per 90 ($\hat{\beta}1 = 0.0280$, $p = 0.0335$). However, the relationship was weak, with progressive carries explaining only 1.62% of the variation in shots per 90 ($R^2 = 0.0162$). These findings suggest that players who make more progressive carries tend to record slightly more shots, but progressive carrying alone provides limited information about individual shooting activity. The results also highlight the limitations of using a single simple linear regression to describe attacking performance, particularly given differences in player roles and the diagnostic issues observed in the model.
+abstract: This paper examines whether outfield players in the 2024-25 English Premier League who make more progressive carries also take more shots. Using 279 players with at least 1,026 minutes played, I fit a simple linear regression of shots per 90 minutes on progressive carries per 90 minutes. Progressive carries are positively associated with shots but explain only 1.6% of the variation in shots per 90. Defenders sit below midfielders and forwards, and the residuals show unequal spread and right skew, so position and team context matter. Carry volume alone is therefore a weak indicator of shooting activity.
 format: pdf
 bibliography: references.bib
 ---
@@ -28,18 +28,19 @@ The English Premier League (EPL) is one of the most competitive soccer leagues i
 
 Although progressive carries measure a player’s ability to move the ball forward, they do not directly indicate whether those actions contribute to attacking opportunities. A player may frequently carry the ball forward without necessarily producing shots. Therefore, it is useful to examine whether players who make more progressive carries also tend to take more shots. This paper addresses this question by examining the relationship between progressive carries and shots among EPL players during the 2024–25 season. Since players receive different amounts of playing time, both variables are measured on a per-90-minute basis.
 
-To investigate this relationship, I use a simple linear regression with progressive carries per 90 minutes as the explanatory variable and shots per 90 minutes as the response variable. The analysis examines the direction and strength of the linear relationship between these two measures. Our results show a **positive but weak association** between progressive carries per 90 and shots per 90. Although the relationship is statistically significant ($\hat{\beta}_1 = 0.0280$, $p = 0.0335$), progressive carries per 90 explain only **1.62% of the variation** in shots per 90 ($R^2 = 0.0162$). These findings suggest that players who make more progressive carries tend to take slightly more shots, but progressive carrying alone provides limited information about a player's shooting activity.
+To investigate this relationship, I use a simple linear regression with progressive carries per 90 minutes as the explanatory variable and shots per 90 minutes as the response variable. The analysis examines the direction and strength of the linear relationship between these two measures. My results show a **positive but weak association** between progressive carries per 90 and shots per 90. Although the relationship is statistically significant ($\hat{\beta}_1 = 0.0280$, $p = 0.0335$), progressive carries per 90 explain only **1.62% of the variation** in shots per 90 ($R^2 = 0.0162$). These findings suggest that players who make more progressive carries tend to take slightly more shots, but progressive carrying alone provides limited information about a player's shooting activity.
 
-The remainder of this paper is organized as follows. The Methods section describes the data, variables, and simple linear regression used in the analysis. The Results section presents the regression results and evaluates the relationship between progressive carries and shots. The Discussion section interprets the findings, considers their implications and limitations, and relates them back to the original research question. Finally, the Conclusion summarizes the main findings of the analysis.
-
+The remainder of this paper is organized as follows. The Data section describes the dataset and variables. The Methods section presents the regression model and its assumptions. The Results section presents the regression results and evaluates the relationship between progressive carries and shots. Finally, the Discussion section interprets the findings, considers their implications and limitations, and relates them back to the original research question. 
 
 # Data
 
+## Data Source
+
+The data consist of 562 players from the 2024--25 English Premier League (EPL) season, with each player as one observational unit. They come from the SCORE Sports Data Repository [@score_epl_2425], which identifies a Kaggle dataset as its source. I used four variables: `Progressive Carries` (carries that substantially advance the ball toward the opponent's goal [@opta]), `Shots` (shots taken over the season), `Minutes` (minutes played), and `Position` (DEF, MID, FWD, or GKP).
+
 ## Data Trimming
 
-The data consist of 562 players from the 2024--25 English Premier League (EPL) season, with each player representing one observational unit. The dataset was obtained from the SCORE Sports Data Repository, which compiled player-level statistics from the season 2024 - 205 [@score_epl_2425].
-
-The two variables used in the analysis are `Progressive Carries` and `Shots`. `Progressive Carries` measures a player's carries that substantially advance the ball toward the opponent's goal, while `Shots` records the number of shots taken by a player during the season (38 90-minutes games per season) [@opta]. Noted that I excluded players that played less than 30% of the total minutes of the season (due to various reasons like injuries, etc.) because their number may not reflects their true ability. Also, I excluded the Goalkeepers because their progressive carries resulting in a goal is extremely rare, almost impossible.
+I excluded goalkeepers, who rarely carry the ball forward or shoot, and players with fewer than 30% of the season's minutes (1,026 of 3,420, from 38 matches of 90 minutes), because injuries or limited appearances make their per-90 rates unstable. This leaves n = 279 players.
 
 ```{r}
 #| echo: false
@@ -55,42 +56,7 @@ filtered_df <- df %>%
     Position != 'GKP'
   )
 
-kable(summary(filtered_df[c("Progressive.Carries", "Shots")]), caption = "Summary Statistics of Progressive Carries" )
 ```
-
-```{r, fig.width = 10, fig.height = 8, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.cap="Comparison of Progressive Carries and Shots before and after filtering"}
-par(mfrow = c(2, 2))
-
-boxplot(
-  df$Progressive.Carries,
-  xlab='Progressive Carries',
-  ylab='Carries'
-)
-
-boxplot(
-  filtered_df$Progressive.Carries,
-  xlab='Progressive Carries after trimming',
-  ylab='Carries'
-
-)
-
-boxplot(
-  df$Shots,
-  xlab='Total Shots',
-  ylab='Shots'
-
-)
-
-boxplot(
-  filtered_df$Shots,
-  xlab='Total Shots after trimming',
-  ylab='Shots'
-)
-
-par(mfrow = c(1, 1))
-```
-
-Figure 1 displays the boxplots of both metrics after excluding goalkeepers and applying the 70% total playing time filter and only outfield players filters ($n=279$. The distribution of Total Shots per 90 is well-behaved and largely symmetric, with a median of approximately 1.0 shot per 90 and a single legitimate high-volume outlier near 4.0. Progressive Carries per 90 exhibits moderate right-skewness, showing a small subset of specialist ball-carrying wingers who average between 15 and 28 progressive carries per 90.
 
 ## Scaling To Per 90
 
@@ -112,19 +78,62 @@ $$
 #| echo: false
 #| warning: false
 #| message: false
-filtered_df$Progressive.Carries.Per90 <- (filtered_df$Progressive.Carries * 90) / filtered_df$Minutes
-filtered_df$Shots.Per90 <- (filtered_df$Shots * 90) / filtered_df$Minutes
+
+per_90 <- function(numerator, denominator) {
+  return(numerator * 90 / denominator)
+}
+
+
+filtered_df$Progressive.Carries.Per90 <- per_90(filtered_df$Progressive.Carries, filtered_df$Minutes)
+filtered_df$Shots.Per90 <- per_90(filtered_df$Shots, filtered_df$Minutes)
 ```
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+kable(summary(filtered_df[c("Progressive.Carries.Per90", "Shots.Per90")]), caption = "Summary statistics (minimum, quartiles, mean, maximum) for progressive carries per 90 minutes and shots per 90 minutes among 279 outfield players with at least 1,026 minutes played in the 2024–25 EPL season." )
+```
 
-The analysis uses the original SCORE dataset as its primary data source. The main data transformation consists of converting the two season totals into per-90 rates. Summary statistics and distributions of the two variables will be examined using tables and plots, followed by a scatterplot of `Progressive Carries per 90` against `Shots per 90` to assess the form and strength of their relationship.
+```{r, fig.width = 10, fig.height = 8, echo=FALSE, warning=FALSE, message=FALSE, fig.align='center', fig.cap="Progressive carries per 90 minutes (top row) and shots per 90 minutes (bottom row) for all 562 players (left column) and after excluding goalkeepers and players with fewer than 1,026 minutes (right column, n = 279). Filtering removes many low-minute players with small per 90 minutes"}
+par(mfrow = c(2, 2))
+
+boxplot(
+  per_90(df$Progressive.Carries, df$Minutes),
+  xlab='Progressive Carries per 90 minutes',
+  ylab='Carries'
+)
+
+boxplot(
+  filtered_df$Progressive.Carries.Per90,
+  xlab='Progressive Carries per 90 minutes after trimming',
+  ylab='Carries'
+
+)
+
+boxplot(
+  per_90(df$Shots, df$Minutes),
+  xlab='Total Shots per 90 minutes',
+  ylab='Shots'
+
+)
+
+boxplot(
+  filtered_df$Shots.Per90,
+  xlab='Total Shots per 90 minutes after trimming',
+  ylab='Shots'
+)
+
+par(mfrow = c(1, 1))
+```
+
+Figure 1 compares both rates before and after filtering (n = 279 after). After filtering, shots per 90 are roughly symmetric around a median of about 1.0, with one high outlier near 4.0. Progressive carries per 90 are right-skewed, with a few players averaging 15 to 28 per 90.
+
+The only transformation applied to the data was converting the two season totals into per-90 rates. Figure 2 plots shots per 90 against progressive carries per 90 to show the form and strength of the relationship.
 
 ```{r}
 #| echo: false
 #| warning: false
 #| message: false
 #| label: progressive-carries-vs-shots-per-90
-#| fig-cap: "Progressive Carries per 90 vs Shots per 90"
+#| fig-cap: "Shots per 90 minutes versus progressive carries per 90 minutes for 279 outfield players. Each point is one player. The cloud slopes weakly upward, with wide spread in shots at any carry rate and a handful of high-carry players on the right."
 #| fig-width: 6
 #| fig-height: 4
 #| fig-align: center
@@ -146,7 +155,7 @@ Figure 2 suggests a positive association between the two variables, although the
 #| warning: false
 #| message: false
 #| label: progressive-carries-vs-shots-per-90-by-pos
-#| fig-cap: "Progressive Carries per 90 vs Shots per 90 by Position"
+#| fig-cap: "The same scatterplot colored by position. Defenders concentrate at low shot rates across the range of carries, while midfielders and forwards reach higher shot rates, suggesting position may drive part of the overall trend"
 #| fig-width: 6
 #| fig-height: 4
 #| fig-align: center
@@ -164,13 +173,17 @@ legend("right", legend = levels(factor(filtered_df$Position)), pch = 19, col = 1
 
 ```
 
-When separating the relationship by `Position`, I can clearly see that progressive carries from forwards and midfielders are more likely to results in higher than 1 shot per match than defenders. This reflects the nature of the roles where defenders are less likely involved in attacking sequences and their progressive carries are mostly to escape pressure from the opponents and progress the ball to players higher up the field.
+When separating the relationship by `Position`, I can clearly see that forwards and midfielders tend to have higher shot rates than defenders at similar carry rates. This reflects the nature of the roles where defenders are less likely involved in attacking sequences and their progressive carries are mostly to escape pressure from the opponents and progress the ball to players higher up the field.
+
+## Alternative Data Sources
+
+I used only the SCORE dataset [@score_epl_2425]. Match-level data, such as the match logs on FBref [@fbref], could replace season totals with per-match rates and allow team effects to be modeled directly, which addresses the clustering limitation described in the Methods section. Season totals from FBref could also be used to check the SCORE values.
 
 # Methods
 
 ## Computational Implementation
 
-All data manipulation, model estimation, and diagnostic evaluations were executed in R [@r_core_team] using the `tidyverse` [@wickham2019tidyverse] and `dplyr` [@wickham2023dplyr] software packages.
+All data manipulation, model estimation, and diagnostic evaluations were executed in R [@r_core_team] using the `tidyverse` [@wickham2019tidyverse], `dplyr` [@wickham2023dplyr], `ggplot2` [@wickham2016ggplot2], and `broom` [@robinson2026broom] software packages.
 
 ## Model Definition & Specification
 
@@ -181,6 +194,7 @@ The statistical model is specified as:
 $$Y_i = \beta_0 + \beta_1 X_i + \epsilon_i \quad \text{for } i = 1, 2, \dots, n$$
 
 where for each player $i$:
+
 - $Y_i$ is the continuous outcome variable representing **Shots per 90 minutes** ($\text{Shotsper90}$).
 
 - $X_i$ is the continuous explanatory variable representing **Progressive Carries per 90 minutes** ($\text{PrgCarriesper90}$).
@@ -195,18 +209,18 @@ where for each player $i$:
 
 ## Model Selection & Validation
 
-To minimize distortion from small sample sizes and unstable rate metrics, players were filtered using a minimum playing time threshold (e.g., at least 450 minutes played in the season). Model selection focused on isolating the bivariate association between carrying progression and shot generation. Overall model fit and explanatory power are validated using the coefficient of determination ($R^2$) to evaluate the proportion of outcome variance explained by the model, alongside an $F$-test to confirm overall statistical significance.
+To minimize distortion from small sample sizes and unstable rate metrics, players were filtered using a minimum playing time threshold. Model selection focused on isolating the bivariate association between carrying progression and shot generation. Overall model fit and explanatory power are validated using the coefficient of determination ($R^2$) to evaluate the proportion of outcome variance explained by the model, alongside an $F$-test to confirm overall statistical significance.
 
 ## Model Assumptions & Diagnostics
-Per the Gauss-Markov Theorem [@knnl] and standard regression diagnostic frameworks, OLS yields the Best Linear Unbiased Estimator (BLUE) under specific error conditions, I evaluated the six core regression assumptions using domain context and visual diagnostic plots by the decreasing structural importance,:
+Per the Gauss-Markov Theorem [@knnl] and standard regression diagnostic frameworks, OLS is the Best Linear Unbiased Estimator (BLUE) under specific error conditions. I evaluated the five core regression assumptions using domain context and visual diagnostics:
 
 1. **Representativeness (Met):** The dataset includes all qualifying Premier League outfielders in the 2024–25 season, making conclusions generalizable to different EPL post-season analysis.
 
 2. **Additivity and Linearity ($E[\epsilon_i \mid X_i] = 0$):** The relationship between $X$ and $Y$ is additive and linear, meaning the expected value of errors conditional on $X_i$ is zero.
 
-3. **Uncorrelated Errors ($\text{Cov}(\epsilon_i, \epsilon_j) = 0$ for $i \neq j$) (Met):** It is reasonable to assume that observations represent season-level player aggregations. However, even though players are modeled independently, mild tactical dependencies exist among players from the same team.
+3. **Uncorrelated Errors ($\text{Cov}(\epsilon_i, \epsilon_j) = 0$ for $i \neq j$) (Questionable):** It is reasonable to assume that observations represent season-level player aggregations. However, even though players are modeled independently, mild tactical dependencies exist among players from the same team.
 
-4. **Homoscedasticity ($\text{Var}(\epsilon_i \mid X_i) = \sigma^2$):** Error variance must remain constant across all levels of predicted values.
+4. **Equal Variance ($\text{Var}(\epsilon_i \mid X_i) = \sigma^2$):** Error variance must remain constant across all levels of predicted values.
 
 5. **Normality of Errors ($\epsilon_i \sim N(0, \sigma^2)$):** Residuals should follow a normal distribution for exact finite-sample inference. 
 
@@ -219,7 +233,7 @@ Several limitations should be considered when interpreting these results:
 
 - **Spatial/Team Clustering:** Players belonging to the same club share strategic playstyles and teammates, violating strict independence across individual error terms.
 
-```{r, echo=FALSE, warning=FALSE, fig.width=10, fig.height=10, fig.align='center', fig.cap="Diagnosis plots for the model"}
+```{r, echo=FALSE, warning=FALSE, fig.width=10, fig.height=10, fig.align='center', fig.cap="Diagnostics for the regression of shots per 90 on progressive carries per 90. Top left: data with the fitted line. Top right: residuals versus the predictor, showing a floor on negative residuals and larger positive ones (unequal spread). Bottom left: histogram of residuals, which is right-skewed. Bottom right: normal Q-Q plot, with departures from the line in both tails."}
 
 model <- lm(Shots.Per90 ~ Progressive.Carries.Per90, data = filtered_df)
 
@@ -261,11 +275,11 @@ I evaluate the core error assumptions using visual inspection of the four diagno
 
 1. **Linearity (Met):** Evaluated via the *X vs Y Scatter Plot* and *Residuals vs Predictor Plot*. The scatter plot reveals a positive linear relationship between progressive carries and shots per 90. In the residuals plot, errors are centered around the horizontal zero line across the range of $X_i$, confirming that the zero conditional mean assumption holds, despite data sparsity at high carrying volumes ($X_i > 15$).
 
-2. **Homoscedasticity (Met):** Evaluated via the *Residuals vs Predictor Plot*. The error variance exhibits mild heteroscedasticity. Because shooting output cannot be negative, a hard lower boundary exists for residuals (bounded near $-1.0$ to $-1.4$), whereas positive errors extend beyond $+2.5$. This creates an asymmetric vertical spread across predictor levels.
+2. **Equal Variance (Need consideration):** Evaluated via the *Residuals vs Predictor Plot*. The error variance exhibits mild heteroscedasticity. Because shooting output cannot be negative, a hard lower boundary exists for residuals (bounded near $-1.0$ to $-1.4$), whereas positive errors extend beyond $+2.5$. This creates an asymmetric vertical spread across predictor levels. However, the residuals are clustered to the left side of the plot, so without further transformation to investigate the cluster, it is hard to justify the variance of the model.
 
-3. **Normality of Errors (Met under CLT):** Evaluated via the *Histogram of Residuals* and *Normal Q-Q Plot*. Both plots indicate moderate positive (right) skewness. The histogram displays a prominent left-leaning peak with a tail extending to $+3.0$, while the Q-Q plot shows sample quantiles curving above the red theoretical line in both upper and lower tails. While exact finite-sample normality is violated, the sample size ($n = 279$) is sufficiently large for the Central Limit Theorem (CLT) to guarantee valid asymptotic hypothesis testing ($t$-tests, confidence intervals, and $p$-values).
+3. **Normality of Errors (Met under CLT):** Evaluated via the *Histogram of Residuals* and *Normal Q-Q Plot*. Both plots indicate moderate positive (right) skewness. The histogram displays a prominent left-leaning peak with a tail extending to $+3.0$, while the Q-Q plot shows sample quantiles curving above the red theoretical line in both upper and lower tails. While exact finite-sample normality is violated, the sample size ($n = 279$) is sufficiently large for the Central Limit Theorem (CLT) to support reasonable asymptotic hypothesis testing ($t$-tests, confidence intervals, and $p$-values).
 
-So in general, all of the assumptions are satisfied, which helps us guarantee that I can draw reliable conclusions from the model.
+Overall, linearity and the large-sample normality argument are reasonable, but the equal-variance assumption is questionable and errors within a team are likely correlated. Inference should be read as approximate; robust or cluster-robust standard errors would be a sensible check.
 
 # Results
 
@@ -276,38 +290,45 @@ $$\widehat{\text{Shotsper90}}_i = 1.1022 + 0.0280 \times \text{PrgCarriesper90}_
 Table 2 shows the details of the estimated regression coefficients, standard errors, $t$-statistics, and corresponding $p$-values.
 
 ```{r, echo=FALSE}
-summary(model)
+library(knitr)
+library(broom)
+tidy(model, conf.int = TRUE) %>%
+  mutate(term = c("Intercept", "Carries per 90")) %>%
+  kable(
+    digits = 3,
+    col.names = c("Term", "Estimate", "Std. error", "t", "p-value", "CI low", "CI high"),
+    caption = "OLS estimates for shots per 90 regressed on progressive carries per 90 (n = 279). R² = 0.016; residual standard error = 0.94 shots per 90."
+  )
 ```
 
-**Table 2: OLS Regression Results for Shots per 90 Minutes**
+The regression results show a positive relationship between progressive carries per 90 minutes and shots per 90 minutes. The coefficient for progressive carries is $0.02797$, meaning that each additional progressive carry per 90 minutes is associated with about $0.028$ more shots per 90 minutes. The p-value is $0.0335$, which is below $0.05$, so the relationship is statistically significant.
 
-The regression results show a positive relationship between progressive carries per 90 minutes and shots per 90 minutes. The coefficient for progressive carries is $0.02797$, meaning that for every additional progressive carry per 90 minutes, the expected number of shots increases by about $0.028 per 90 minutes. The p-value is $0.0335$, which is below $0.05$, so the relationship is statistically significant.
+However, the model explains very little of the variation in shots (Figure 5). The $R^2$ value is only $0.0162$, meaning that progressive carries explain about $1.62\%$ of the differences in shots per 90 minutes. The adjusted $R^2$ is similar at $0.0127$. This suggests that although there is a statistically significant relationship, progressive carries alone are not a strong predictor of how often a player shoots.
 
-However, the model explains very little of the variation in shots (Figure 5). The $R^2$ value is only $0.0162$, meaning that progressive carries explain about $1.62%$ of the differences in shots per 90 minutes. The adjusted $R^2$ is similar at $0.0127$. This suggests that although there is a statistically significant relationship, progressive carries alone are not a strong predictor of how often a player shoots.
+The residual standard error is $0.9397$, meaning that the model's predictions are typically off by about $0.94$ shots per 90 minutes. The overall F-test is also statistically significant ($F(1,277) = 4.567$, $p = 0.0335$), confirming that the model has a significant relationship with shots per 90 minutes. Overall, the results suggest that progressive carries are related to shooting, but the relationship is relatively small and most of the variation in shooting comes from other factors.
 
-The residual standard error is $0.9397$, meaning that the model's predictions are typically off by about $0.94 shots per 90 minutes. The overall F-test is also statistically significant ($F(1,277) = 4.567$, $p = 0.0335$), confirming that the model has a significant relationship with shots per 90 minutes. Overall, the results suggest that progressive carries are related to shooting, but the relationship is relatively small and most of the variation in shooting comes from other factors.
-
-```{r fitted-plot, warning=FALSE, message=FALSE, fig.cap="Fitted OLS Regression Line overlaying Shots per 90 vs. Progressive Carries per 90.", fig.align="center", echo=FALSE}
+```{r fitted-plot, warning=FALSE, message=FALSE, fig.cap="OLS fitted line (blue) with a 95% confidence band over the player-level data. The slope is 0.028 additional shots per 90 for each additional progressive carry per 90 (R² = 0.016), so the trend is small relative to the spread of the data.", fig.align="center", echo=FALSE}
 
 ggplot(filtered_df, aes(x = Progressive.Carries.Per90, y = Shots.Per90)) +
    geom_point(alpha = 0.5) +
    geom_smooth(method = "lm", col = "blue") +
+   labs(x = "Progressive Carries per 90 minutes", y = "Shots per 90 minutes") +
    theme_minimal()
 
 ```
-# Discussions
+# Discussion
 
 ## Key Finding
 
 Among 279 EPL regular outfield players, progressive carries per 90 were positively associated with shots per 90 ($\hat{\beta}_1 = 0.0280$, $p = 0.0335$). However, the relationship was weak, with progressive carries explaining only 1.62% of the variation in shots per 90 ($R^2 = 0.0162$). Thus, while the association is statistically significant, progressive carrying alone provides limited information about a player's shooting activity.
 
-The results should be interpreted with several limitations. The simple regression does not account for factors such as player position, team tactics, or possession, which may contribute substantially to shooting activity. In addition, the residual diagnostics indicate that the OLS assumptions are not fully satisfied, particularly regarding variance and the distribution of the residuals. Players from the same team may also share tactical environments, which is not captured by the model.
+The results should be interpreted with several limitations. The simple regression does not account for factors such as player position, team tactics, or possession, which may contribute substantially to shooting activity. In addition, the residual diagnostics indicate that the OLS assumptions are not fully satisfied, particularly regarding equal variance assumption. Players from the same team may also share tactical environments, which is not captured by the model.
 
 Overall, the findings suggest that progressive carrying and shooting are related, but progressive carries alone are not a strong predictor of shots per 90. Future analyses could account for positional differences and team-level effects and consider models better suited to non-negative, skewed player statistics.
 
-## Potential different relationship by Position
+## Differences by Position
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Residuals vs Progressive Carries per 90 by Position"}
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Residuals from the simple regression versus progressive carries per 90, colored by position. Systematic differences between position groups indicate that position is an omitted variable."}
 plot(
   y=model$residuals,
   x=filtered_df$Progressive.Carries.Per90,
@@ -328,6 +349,6 @@ As shown in the Data section, if we separate the residuals by Position, the rela
 
 # AI Use Statement
 
-ChatGPT (OpenAI) was used for language polishing, rephrasing, and assistance with R Markdown/Quarto syntax. All statistical analyses, interpretations, and conclusions were independently reviewed by the authors.[@openai_chatgpt]
+ChatGPT (OpenAI) [@openai_chatgpt] was used for language polishing, rephrasing, and Quarto syntax. Claude (Anthropic) was used to review the draft against the rubric and to suggest captions, an abstract, a paragraph on alternative data sources, and the analysis script. I reviewed and verified all analyses, interpretations, and conclusions.
 
 # References
